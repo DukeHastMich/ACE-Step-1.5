@@ -42,7 +42,9 @@ def register_generation_run_handlers(context: GenerationWiringContext) -> None:
             `res_h.generate_with_batch_management`.
         """
 
-        yield from res_h.generate_with_batch_management(dit_handler, llm_handler, *args)
+        yield from res_h.generate_with_batch_management(
+            dit_handler, llm_handler, *args[:-4], song_title=args[-4], song_prompt=args[-3],
+            remaster_preset=args[-1] if args[-2] == "Remaster" else "")
 
     generation_section["generate_btn"].click(
         fn=res_h.clear_audio_outputs_for_new_generation,
@@ -138,6 +140,10 @@ def register_generation_run_handlers(context: GenerationWiringContext) -> None:
             results_section["total_batches"],
             results_section["batch_queue"],
             results_section["generation_params_state"],
+            generation_section["song_title"],
+            generation_section["simple_query_input"],
+            generation_section["generation_mode"],
+            generation_section["remaster_preset"],
         ],
         outputs=[
             results_section["generated_audio_1"],

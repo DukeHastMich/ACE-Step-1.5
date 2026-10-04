@@ -120,7 +120,7 @@ def get_ui_control_config(is_turbo: bool, is_pure_base: bool = False, is_sft: bo
             "use_adg_visible": False,
             "shift_value": 3.0,
             "shift_visible": True,
-            "dcw_enabled_value": True,
+            "dcw_enabled_value": False,
             "cfg_interval_start_visible": False,
             "cfg_interval_end_visible": False,
             "task_type_choices": task_choices,

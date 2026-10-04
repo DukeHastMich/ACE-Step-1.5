@@ -102,7 +102,7 @@ class ServiceGenerateExecuteMixinTests(unittest.TestCase):
         self.assertTrue(host._resolve_service_dcw_enabled({"dcw_enabled": True}))
 
         host.config = types.SimpleNamespace(is_turbo=True)
-        self.assertTrue(host._resolve_service_dcw_enabled({}))
+        self.assertFalse(host._resolve_service_dcw_enabled({}))
         self.assertFalse(host._resolve_service_dcw_enabled({"dcw_enabled": False}))
 
     def test_service_execution_resolves_dcw_for_pytorch_fallback(self):

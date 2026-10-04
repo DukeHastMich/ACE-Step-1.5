@@ -18,7 +18,7 @@ def _create_audio_column(n, visible=True):
             Row: score_display + score_btn
             Row: lrc_display + lrc_btn
     """
-    with gr.Column(visible=visible) as audio_col:
+    with gr.Column(visible=visible, elem_classes="ace-take") as audio_col:
         generated_audio = gr.Audio(
             label=t("results.generated_music", n=n),
             type="filepath",
@@ -112,13 +112,13 @@ def create_results_section(dit_handler) -> dict:
         is_generating_background = gr.State(value=False)
 
         # Row 1: samples 1-4
-        with gr.Row():
+        with gr.Row(elem_classes="ace-take-row"):
             cols_1_4 = []
             for i in range(1, 5):
                 cols_1_4.append(_create_audio_column(i, visible=(i <= 2)))
         
         # Row 2: samples 5-8 (initially hidden)
-        with gr.Row(visible=False) as audio_row_5_8:
+        with gr.Row(visible=False, elem_classes="ace-take-row") as audio_row_5_8:
             cols_5_8 = []
             for i in range(5, 9):
                 cols_5_8.append(_create_audio_column(i, visible=True))
@@ -153,7 +153,7 @@ def create_results_section(dit_handler) -> dict:
             variant="secondary", interactive=False, size="sm"
         )
         
-        with gr.Accordion(t("results.batch_results_title"), open=True):
+        with gr.Accordion(t("results.batch_results_title"), open=False):
             generated_audio_batch = gr.File(
                 label=t("results.all_files_label"),
                 file_count="multiple", interactive=False

@@ -1,0 +1,45 @@
+#ace-track-view {display:none !important;}
+.ace-track-page {position:fixed; inset:0 0 78px; z-index:900; overflow-y:auto;
+  background:#101014; color:#ededf2; padding:28px max(24px,calc((100vw - 1360px)/2));
+  font-family:inherit; box-sizing:border-box;}
+.ace-track-page * {box-sizing:border-box;}
+.ace-track-page button,.ace-track-actions a {cursor:pointer; font:inherit;}
+.ace-track-page button:focus-visible,.ace-track-page a:focus-visible {outline:2px solid #f1a16d; outline-offset:4px;}
+.ace-track-back {border:0; background:none; color:#b5b5c3; padding:4px 0; margin-bottom:28px;}
+.ace-track-hero {display:flex; gap:32px; align-items:center; border-bottom:1px solid #30303a; padding-bottom:32px;}
+.ace-track-cover {position:relative; width:220px; height:220px; flex:0 0 220px; border:0; border-radius:16px;
+  overflow:hidden; background:linear-gradient(140deg,#614778,#234d63); color:white; font-size:64px;}
+.ace-track-cover img {width:100%; height:100%; object-fit:cover; display:block;}
+.ace-track-cover small {position:absolute; bottom:10px; left:20px; right:20px; padding:7px;
+  border-radius:20px; background:#111a; font-size:12px;}
+.ace-track-summary {min-width:0; flex:1;}
+.ace-track-eyebrow {color:#f1a16d; letter-spacing:2px; font-size:11px;}
+.ace-track-page h1 {font-size:clamp(24px,3vw,40px); line-height:1.15; margin:12px 0; overflow-wrap:anywhere;}
+.ace-track-style {color:#c1c1cf; line-height:1.6; white-space:pre-wrap;}
+.ace-track-facts {color:#8d8d9e; font-size:12px; margin:16px 0;}
+.ace-track-actions {display:flex; flex-wrap:wrap; gap:8px;}
+.ace-track-actions button,.ace-track-actions a {text-decoration:none; color:#ededf2; padding:9px 14px;
+  border:1px solid #3a3a47; background:#252530; border-radius:20px; font-size:12px;}
+.ace-track-actions button[data-action=play] {background:#f1a16d; color:#211710; border-color:#f1a16d;}
+.ace-track-body {display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:64px; padding:28px 0;}
+.ace-track-page h2 {font-size:16px; margin:0 0 16px;}
+.ace-track-body p {white-space:pre-wrap; overflow-wrap:anywhere; font-size:14px; line-height:1.8; color:#c1c1cf;}
+.ace-track-body aside section {background:#19191f; border:1px solid #30303a; padding:20px; border-radius:12px; margin-bottom:20px;}
+@media(max-width:700px) {.ace-track-page {bottom:100px; padding:18px;}
+ .ace-track-hero {align-items:flex-start; gap:18px; flex-direction:column;}
+ .ace-track-cover {width:160px; height:160px; flex-basis:160px;}
+ .ace-track-body {grid-template-columns:minmax(0,1fr); gap:24px;}}
+
+.ace-notes-label {display:block; color:#a5a5b4; font-size:12px; margin-bottom:10px;}
+.ace-track-page textarea {width:100%; resize:vertical; background:#111117; color:#ededf2;
+ border:1px solid #3a3a47; border-radius:8px; padding:12px; font:inherit; font-size:14px; line-height:1.6;}
+.ace-save-notes {background:#f1a16d; color:#211710; border:0; border-radius:18px; padding:8px 16px; margin-top:10px;}
+.ace-track-body .ace-notes-status {font-size:12px; color:#f1a16d; margin-bottom:0;}
+
+.ace-distribution-toggle {display:flex; align-items:center; gap:10px; font-weight:600; cursor:pointer;}
+.ace-distribution input[type=checkbox] {accent-color:#f1a16d; width:17px; height:17px;}
+.ace-distribution [hidden] {display:none !important;}
+.ace-distribution [data-distribution-fields] > label {display:block; font-size:13px; margin-top:18px;}
+.ace-distribution input[type=text] {display:block; width:100%; margin-top:8px; padding:10px 12px;
+ background:#111117; color:#ededf2; border:1px solid #3a3a47; border-radius:8px;}
+.ace-distribution textarea {margin-top:8px;}

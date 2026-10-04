@@ -2,24 +2,8 @@
 Gradio UI Components Module
 Contains all Gradio interface component definitions and layouts
 
-Layout:
-  ┌──────────────────────────────────────┐
-  │  Header                              │
-  ├──────────────────────────────────────┤
-  │  Dataset Explorer (hidden accordion) │
-  ├──────────────────────────────────────┤
-  │  Settings (accordion, collapsed)     │
-  │   ├─ Service Configuration           │
-  │   ├─ DiT Parameters                  │
-  │   ├─ LM Parameters                   │
-  │   └─ Output / Automation             │
-  ├──────────────────────────────────────┤
-  │  ┌─ Generation ─┬─ Training ──────┐  │
-  │  │  Mode Radio   │  Dataset/LoRA  │  │
-  │  │  Inputs       │                │  │
-  │  │  Results      │                │  │
-  │  └───────────────┴────────────────┘  │
-  └──────────────────────────────────────┘
+Layout: Create pane on the left, saved library and current takes on the right.
+Settings and Training live in separate top-level tabs.
 """
 import gradio as gr
 from acestep.ui.gradio.i18n import get_i18n, t
@@ -35,7 +19,8 @@ from acestep.ui.gradio.interfaces.user_preferences import (
     get_user_preferences_head,
     wire_preference_restore,
 )
-from acestep.ui.gradio.interfaces.result import create_results_section
+from .workspace import create_workspace
+from .workspace_style import WORKSPACE_CSS, workspace_theme
 from acestep.ui.gradio.interfaces.training import create_training_section
 from acestep.ui.gradio.events import setup_event_handlers, setup_training_event_handlers
 from acestep.ui.gradio.help_content import create_help_button, HELP_MODAL_CSS
@@ -64,7 +49,7 @@ def create_gradio_interface(dit_handler, llm_handler, dataset_handler, init_para
     
     with gr.Blocks(
         title=t("app.title"),
-        theme=gr.themes.Soft(),
+        theme=workspace_theme(),
         head=get_audio_player_preferences_head() + ("" if service_mode else get_user_preferences_head()) + """
         <script>
         /* Flip tooltips upward when they would overflow the viewport bottom.
@@ -310,13 +295,13 @@ def create_gradio_interface(dit_handler, llm_handler, dataset_handler, init_para
             width: 13px !important;
             height: 13px !important;
         }
-        """ + HELP_MODAL_CSS,
+        """ + HELP_MODAL_CSS + WORKSPACE_CSS,
     ) as demo:
         
         gr.HTML(f"""
         <div class="main-header">
-            <h1>{t("app.title")}</h1>
-            <p>{t("app.subtitle")}</p>
+            <h1>ACE-Step <span style="color:#ee985d">/</span> Studio</h1>
+            <p>{t("workspace.subtitle")}</p>
         </div>
         """)
         create_help_button("getting_started")
@@ -324,29 +309,17 @@ def create_gradio_interface(dit_handler, llm_handler, dataset_handler, init_para
         # Dataset Explorer Section (hidden)
         dataset_section = create_dataset_section(dataset_handler)
         
-        # ═══════════════════════════════════════════
-        # Top-level: Settings (contains Service Config + Advanced Settings)
-        # ═══════════════════════════════════════════
-        settings_section = create_advanced_settings_section(
-            dit_handler, llm_handler, init_params=init_params, language=language
-        )
-        
-        # ═══════════════════════════════════════════
-        # Tabs: Generation | Training
-        # ═══════════════════════════════════════════
+        # One workspace, with setup and training in separate tabs.
         with gr.Tabs():
-            # --- Generation Tab ---
-            with gr.Tab(t("generation.tab_title")):
-                gen_section = create_generation_tab_section(
+            with gr.Tab(t("workspace.create_tab")):
+                gen_section, results_section = create_workspace(
+                    demo, dit_handler, llm_handler, init_params, language
+                )
+            with gr.Tab(t("generation.advanced_settings")):
+                settings_section = create_advanced_settings_section(
                     dit_handler, llm_handler, init_params=init_params, language=language
                 )
-                
-                # Results Section (inside the Generation tab, wrapped for visibility control)
-                with gr.Column(visible=True) as results_wrapper:
-                    results_section = create_results_section(dit_handler)
-                # Store the wrapper in gen_section so event handlers can toggle it
-                gen_section["results_wrapper"] = results_wrapper
-            
+
             # --- Training Tab ---
             with gr.Tab(t("training.tab_title"), visible=not service_mode):
                 training_section = create_training_section(

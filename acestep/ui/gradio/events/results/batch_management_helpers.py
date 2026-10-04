@@ -126,7 +126,7 @@ def _apply_param_defaults(params):
         "shift": 1.0, "infer_method": "ode",
         "sampler_mode": "euler", "velocity_norm_threshold": 0.0,
         "velocity_ema_factor": 0.0,
-        "dcw_enabled": True,
+        "dcw_enabled": False,
         "dcw_mode": dcw_defaults["mode"],
         "dcw_scaler": dcw_defaults["scaler"],
         "dcw_high_scaler": dcw_defaults["high_scaler"],

@@ -94,16 +94,17 @@ TASK_TYPES_BASE = ["text2music", "repaint", "cover", "cover-nofsq", "extract", "
 # ==============================================================================
 
 # Default modes for turbo and SFT models (restricted set)
-GENERATION_MODES_TURBO = ["Simple", "Custom", "Remix", "Repaint"]
+GENERATION_MODES_TURBO = ["Simple", "Custom", "Remix", "Remaster", "Repaint"]
 
 # Extended modes for pure base models only — adds Extract/Lego/Complete
-GENERATION_MODES_BASE = ["Simple", "Custom", "Remix", "Repaint", "Extract", "Lego", "Complete"]
+GENERATION_MODES_BASE = ["Simple", "Custom", "Remix", "Remaster", "Repaint", "Extract", "Lego", "Complete"]
 
 # Mapping from generation mode to task_type value
 MODE_TO_TASK_TYPE = {
     "Simple": "text2music",
     "Custom": "text2music",
     "Remix": "cover",
+    "Remaster": "cover",
     "Repaint": "repaint",
     "Extract": "extract",
     "Lego": "lego",

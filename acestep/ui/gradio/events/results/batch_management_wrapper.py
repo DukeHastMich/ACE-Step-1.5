@@ -65,6 +65,7 @@ def generate_with_batch_management(
     batch_queue,
     generation_params_state,
     progress=gr.Progress(track_tqdm=True),
+    *, song_title="", song_prompt="", remaster_preset="",
 ):
     """Wrap ``generate_with_progress`` with batch queue management state."""
     _ = generation_params_state  # reserved for API compatibility with wiring/state outputs
@@ -97,6 +98,7 @@ def generate_with_batch_management(
         flow_edit_morph, flow_edit_source_caption, flow_edit_source_lyrics,
         flow_edit_n_min, flow_edit_n_max, flow_edit_n_avg,
         progress,
+        song_title=song_title, song_prompt=song_prompt, remaster_preset=remaster_preset,
     )
 
     final_result_from_inner = None
@@ -172,6 +174,9 @@ def generate_with_batch_management(
         retake_variance=retake_variance, retake_seed=retake_seed,
     )
 
+    saved_params["song_title"] = song_title
+    saved_params["song_prompt"] = song_prompt
+    saved_params["remaster_preset"] = remaster_preset
     next_params = saved_params.copy()
     next_params["text2music_audio_code_string"] = ""
     next_params["random_seed_checkbox"] = True

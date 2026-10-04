@@ -91,7 +91,7 @@ def generate_next_batch_background(
             sampler_mode=params.get("sampler_mode", "euler"),
             velocity_norm_threshold=params.get("velocity_norm_threshold", 0.0),
             velocity_ema_factor=params.get("velocity_ema_factor", 0.0),
-            dcw_enabled=params.get("dcw_enabled", True),
+            dcw_enabled=params.get("dcw_enabled", False),
             dcw_mode=params.get("dcw_mode", "double"),
             dcw_scaler=params.get("dcw_scaler", 0.05),
             dcw_high_scaler=params.get("dcw_high_scaler", 0.02),
@@ -127,6 +127,9 @@ def generate_next_batch_background(
             retake_variance=params.get("retake_variance", 0.0),
             retake_seed=params.get("retake_seed", ""),
             progress=progress,
+            song_title=params.get("song_title", ""),
+            song_prompt=params.get("song_prompt", ""),
+            remaster_preset=params.get("remaster_preset", ""),
         )
 
         final_result = None

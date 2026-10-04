@@ -1,4 +1,23 @@
 {
+  "workspace": {
+    "audio_tools": "Source audio & editing tools",
+    "subtitle": "Shape an idea. Find your sound. Keep creating.",
+    "create_tab": "Create",
+    "create_heading": "## Create",
+    "library_heading": "## Your music",
+    "current_takes": "Current takes",
+    "saved_songs": "Library",
+    "library_hint": "Your saved generations, newest first. Select a track to listen or edit.",
+    "search": "Search your music…",
+    "track": "Track",
+    "created": "Created",
+    "length": "Length",
+    "format": "Format",
+    "selected_track": "Selected track",
+    "song_details": "Song details",
+    "song_count": "{count} songs · Saved on this computer",
+    "song_missing": "This song is no longer available. Refresh the library and select another track."
+  },
   "app": {
     "title": "🎛️ ACE-Step V1.5 Playground💡",
     "subtitle": "Pushing the Boundaries of Open-Source Music Generation"

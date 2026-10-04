@@ -50,13 +50,22 @@ def register_generation_mode_handlers(
 
     # Shared handler for mode-change and initial page load — extracted to
     # avoid duplicating the lambda and to keep both call sites in sync.
-    def _handle_mode_change(mode: str, prev: str | None):
+    def _handle_mode_change(mode: str, prev: str | None, preset="Subtle"):
         """Proxy mode-change handling for both .change() and .load() events."""
-        return gen_h.handle_generation_mode_change(mode, prev, llm_handler)
+        updates = list(gen_h.handle_generation_mode_change(mode, prev, llm_handler))
+        from acestep.ui.gradio.remaster import remaster_strength
+        if mode == "Remaster":
+            updates[17] = gr.update(value=1.0, visible=False)
+            updates[18] = gr.update(value=remaster_strength(preset), visible=False)
+            updates[2] = gr.update(value="Remaster · Save new version", interactive=True)
+            updates[39] = gr.update(visible=False)
+            updates[50] = gr.update(value=False, visible=False)
+        return tuple(updates)
 
     mode_change_inputs = [
         generation_section["generation_mode"],
         generation_section["previous_generation_mode"],
+        generation_section["remaster_preset"],
     ]
     dcw_default_outputs = [
         generation_section["dcw_mode"],
@@ -70,6 +79,17 @@ def register_generation_mode_handlers(
         inputs=mode_change_inputs,
         outputs=mode_ui_outputs,
     )
+
+    def update_remaster_preset(mode, preset):
+        """Keep source-retention controls consistent with the selected preset."""
+        from acestep.ui.gradio.remaster import remaster_strength
+        return (1.0, remaster_strength(preset)) if mode == "Remaster" else (gr.skip(), gr.skip())
+
+    generation_section["remaster_preset"].change(
+        update_remaster_preset,
+        inputs=[generation_section["generation_mode"], generation_section["remaster_preset"]],
+        outputs=[generation_section["audio_cover_strength"], generation_section["cover_noise_strength"]],
+        queue=False)
 
     # ========== Initial Mode State on Page Load ==========
     # compute_mode_ui_updates() controls visibility for 44 mode-dependent UI

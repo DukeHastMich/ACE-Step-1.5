@@ -84,7 +84,7 @@ class GenerationParams:
         use_adg: Whether to use Adaptive Dual Guidance (only works for base model).
         cfg_interval_start: Start ratio (0.0–1.0) to apply CFG.
         cfg_interval_end: End ratio (0.0–1.0) to apply CFG.
-        shift: Timestep shift factor (default 1.0). When != 1.0, applies t = shift * t / (1 + (shift - 1) * t) to timesteps.
+        shift: Timestep shift factor (default 3.0). When != 1.0, applies t = shift * t / (1 + (shift - 1) * t) to timesteps.
         
         # Task-Specific Parameters
         task_type: Type of generation task. One of: "text2music", "cover", "repaint", "lego", "extract", "complete".
@@ -148,14 +148,13 @@ class GenerationParams:
     use_adg: bool = False
     cfg_interval_start: float = 0.0
     cfg_interval_end: float = 1.0
-    shift: float = 1.0
+    shift: float = 3.0
     infer_method: str = "ode"  # "ode" or "sde" - diffusion inference method
     sampler_mode: str = "euler"  # "euler" (first-order) or "heun" (second-order predictor-corrector)
     velocity_norm_threshold: float = 0.0  # Clamp velocity prediction norms (0 = disabled, try 2.0)
     velocity_ema_factor: float = 0.0  # Velocity EMA smoothing (0 = disabled, try 0.1)
     # DCW — Differential Correction in Wavelet domain (CVPR 2026, arXiv:2604.16044).
-    # Resolved after the loaded model configuration is available: enabled for
-    # Turbo and disabled for non-Turbo models unless explicitly overridden.
+    # None means DCW stays off. Callers opt in with an explicit True.
     dcw_enabled: Optional[bool] = None
     # Defaults tuned by grid search on the pure-DiT path; "double" with
     # low_scaler=0.05 and high_scaler=0.02 was the top configuration.  In

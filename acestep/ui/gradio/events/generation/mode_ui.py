@@ -19,7 +19,7 @@ def compute_mode_ui_updates(mode: str, llm_handler=None, previous_mode: str = "C
 
     is_simple = (mode == "Simple")
     is_custom = (mode == "Custom")
-    is_cover = mode == "Remix"
+    is_cover = mode in ("Remix", "Remaster")
     is_repaint = (mode == "Repaint")
     is_extract = (mode == "Extract")
     is_lego = (mode == "Lego")
@@ -81,6 +81,8 @@ def compute_mode_ui_updates(mode: str, llm_handler=None, previous_mode: str = "C
         "Complete": t("generation.mode_info_complete"),
     }
     mode_help_text = mode_descriptions.get(mode, "")
+    if mode == "Remaster":
+        mode_help_text = "Regenerate close to the source with a controlled amount of variation."
     show_results = not_simple
 
     # Generate button label
@@ -122,7 +124,7 @@ def compute_mode_ui_updates(mode: str, llm_handler=None, previous_mode: str = "C
         auto_duration_update = gr.update()
 
     # Clear stale audio codes when leaving/returning from source-audio modes.
-    _prev_has_src_audio = previous_mode in ("Remix", "Repaint", "Extract", "Lego", "Complete")
+    _prev_has_src_audio = previous_mode in ("Remix", "Remaster", "Repaint", "Extract", "Lego", "Complete")
     if is_custom:
         if _prev_has_src_audio:
             audio_codes_update = gr.update(value="", visible=True)

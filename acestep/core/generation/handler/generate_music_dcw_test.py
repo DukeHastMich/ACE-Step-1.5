@@ -28,8 +28,8 @@ class ModelAwareDcwDefaultTests(unittest.TestCase):
         self.assertEqual(forwarded["inference_steps"], 50)
         self.assertFalse(forwarded["dcw_enabled"])
 
-    def test_turbo_keeps_dcw_enabled_by_default(self):
-        """Turbo's established default should remain enabled."""
+    def test_turbo_leaves_dcw_off_by_default(self):
+        """An unset DCW flag stays off on Turbo as well."""
         host = _Host(is_turbo=True)
         host.generate_music(
             captions="cap",
@@ -39,7 +39,7 @@ class ModelAwareDcwDefaultTests(unittest.TestCase):
             seed=77,
         )
 
-        self.assertTrue(host.calls["_run_generate_music_service_with_progress"]["dcw_enabled"])
+        self.assertFalse(host.calls["_run_generate_music_service_with_progress"]["dcw_enabled"])
 
     def test_explicit_non_turbo_dcw_opt_in_is_preserved(self):
         """An explicit non-Turbo DCW choice should override the default."""

@@ -126,7 +126,7 @@ class BatchManagementHelperTests(unittest.TestCase):
         self.assertIn("fade_out_duration", params)
         self.assertEqual(params["fade_in_duration"], 0.0)
         self.assertEqual(params["fade_out_duration"], 0.0)
-        self.assertEqual(params["dcw_enabled"], True)
+        self.assertEqual(params["dcw_enabled"], False)
         self.assertEqual(params["dcw_mode"], "double")
         self.assertEqual(params["dcw_scaler"], 0.02)
         self.assertEqual(params["dcw_high_scaler"], 0.06)

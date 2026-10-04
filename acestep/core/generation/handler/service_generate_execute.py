@@ -62,12 +62,11 @@ class ServiceGenerateExecuteMixin:
         return random.randint(0, 2**32 - 1)
 
     def _resolve_service_dcw_enabled(self, generate_kwargs: Dict[str, Any]) -> bool:
-        """Return an explicit or loaded-model DCW value for backend execution."""
+        """Return an explicit DCW value, or off when the caller leaves it unset."""
         dcw_enabled = generate_kwargs.get("dcw_enabled")
         if dcw_enabled is not None:
             return bool(dcw_enabled)
-        config = getattr(self, "config", None)
-        return bool(getattr(config, "is_turbo", False))
+        return False
 
     def _build_service_generate_kwargs(
         self,

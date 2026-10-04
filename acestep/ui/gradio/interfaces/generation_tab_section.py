@@ -5,6 +5,7 @@ from typing import Any
 import gradio as gr
 
 from acestep.constants import GENERATION_MODES_BASE, GENERATION_MODES_TURBO
+from acestep.ui.gradio.i18n import t
 
 from .generation_defaults import compute_init_defaults, resolve_is_pure_base_model
 from .generation_tab_primary_controls import (
@@ -68,13 +69,17 @@ def create_generation_tab_section(
     with gr.Group():
         mode_controls = build_mode_selector_controls(initial_mode_choices)
         hidden_state_controls = build_hidden_generation_state()
+        song_title = gr.Textbox(label="Song title", placeholder="Give your song a name…",
+                                max_lines=1, elem_id="ace-song-title")
+        remaster_preset = gr.Radio(choices=["Subtle", "Normal", "High"], value="Subtle",
+            label="Remaster variation", visible=False,
+            info="Subtle stays closest. Normal allows more change. High allows the most. Saves a new track.")
         simple_mode_controls = build_simple_mode_controls()
-        source_track_code_controls = build_source_track_and_code_controls()
-        # Retake + Edit accordion sits right under LM codes Hints so the
-        # variation knobs are next to the source-audio inputs they apply to.
-        variation_morph_controls = build_variation_morph_controls()
-        cover_controls = build_cover_strength_controls()
         custom_mode_controls = build_custom_mode_controls()
+        with gr.Accordion(t("workspace.audio_tools"), open=False) as audio_tools:
+            source_track_code_controls = build_source_track_and_code_controls()
+            variation_morph_controls = build_variation_morph_controls()
+            cover_controls = build_cover_strength_controls()
         repainting_controls = build_repainting_controls()
         optional_controls = build_optional_parameter_controls(
             max_duration=max_duration,
@@ -89,7 +94,14 @@ def create_generation_tab_section(
             service_mode=service_mode,
         )
 
-    result: dict[str, Any] = {}
+    mode_controls["generation_mode"].change(
+        lambda mode: gr.update(open=mode in ("Remix", "Remaster", "Repaint", "Extract", "Lego", "Complete")),
+        inputs=[mode_controls["generation_mode"]], outputs=[audio_tools], queue=False,
+    )
+    mode_controls["generation_mode"].change(
+        lambda mode: gr.update(visible=mode == "Remaster"),
+        inputs=[mode_controls["generation_mode"]], outputs=[remaster_preset], queue=False)
+    result: dict[str, Any] = {"song_title": song_title, "remaster_preset": remaster_preset}
     result.update(mode_controls)
     result.update(hidden_state_controls)
     result.update(simple_mode_controls)

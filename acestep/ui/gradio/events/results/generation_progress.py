@@ -75,6 +75,7 @@ def generate_with_progress(
     flow_edit_n_max=1.0,
     flow_edit_n_avg=1,
     progress=gr.Progress(track_tqdm=True),
+    *, song_title="", song_prompt="", remaster_preset="",
 ):
     """Generate audio with progress tracking.
 
@@ -116,6 +117,8 @@ def generate_with_progress(
         logger.info("[generate_with_progress] Skipping Phase 1 metas COT: is_format_caption=True")
         gr.Info(t("messages.skipping_metas_cot"))
 
+    if remaster_preset:
+        custom_timesteps, inference_steps = "", 8
     parsed_timesteps, _has_ts_warn, _ = parse_and_validate_timesteps(custom_timesteps, inference_steps)
     actual_inference_steps = len(parsed_timesteps) - 1 if parsed_timesteps is not None else inference_steps
 
@@ -199,6 +202,10 @@ def generate_with_progress(
         flow_edit_n_avg=int(flow_edit_n_avg) if flow_edit_n_avg is not None else 1,
     )
 
+    if remaster_preset:
+        from acestep.ui.gradio.remaster import apply_remaster
+        apply_remaster(gen_params, remaster_preset)
+
     if isinstance(seed, str) and seed.strip():
         seed_list = [int(s.strip()) for s in seed.split(",")] if "," in seed else [int(seed.strip())]
     else:
@@ -280,7 +287,18 @@ def generate_with_progress(
         key = audios[i]["key"]
         audio_tensor = audios[i]["tensor"]
         sample_rate = audios[i]["sample_rate"]
-        audio_params = audios[i]["params"]
+        audio_params = dict(audios[i]["params"])
+        audio_params["remix_inputs"] = {
+            "title": str(song_title or ""), "prompt": str(song_prompt or ""),
+            "style": str(captions or ""), "lyrics": str(lyrics or ""),
+        }
+        if remaster_preset:
+            audio_params["remaster"] = {"preset": remaster_preset, "source_audio": src_audio,
+                "source_retention": gen_params.cover_noise_strength, "version": 1}
+        # Persist the title before publishing the audio/sidecar to the UI or library.
+        title = " ".join(str(song_title or "").split())[:200]
+        if title:
+            audio_params["title"] = title
 
         timestamp = int(time_module.time())
         temp_dir = os.path.join(DEFAULT_RESULTS_DIR, f"batch_{timestamp}")

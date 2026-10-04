@@ -117,7 +117,7 @@ class GetUiControlConfigTests(unittest.TestCase):
         """Turbo models should default to 8 inference steps."""
         cfg = get_ui_control_config(is_turbo=True)
         self.assertEqual(cfg["inference_steps_value"], 8)
-        self.assertTrue(cfg["dcw_enabled_value"])
+        self.assertFalse(cfg["dcw_enabled_value"])
 
     def test_turbo_takes_precedence_over_sft(self):
         """When both turbo and SFT flags are set, turbo should win."""
@@ -139,7 +139,7 @@ class UpdateModelTypeSettingsIntegrationTests(unittest.TestCase):
         """Passing a turbo model path should yield 8 inference steps."""
         result = update_model_type_settings("acestep-v15-turbo")
         self.assertEqual(result[0]["value"], 8)
-        self.assertEqual(result[9]["value"], True)
+        self.assertEqual(result[9]["value"], False)
 
     def test_base_path_produces_32_steps(self):
         """Passing a base model path should yield 32 inference steps."""

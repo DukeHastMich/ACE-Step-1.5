@@ -179,18 +179,17 @@ class GenerateMusicMixin:
         }
 
     def _resolve_dcw_enabled(self, dcw_enabled: Optional[bool]) -> bool:
-        """Resolve an explicit or model-aware DCW setting.
+        """Resolve an explicit DCW setting, defaulting to off.
 
         Args:
-            dcw_enabled: Explicit caller choice, or ``None`` for the model
-                family default.
+            dcw_enabled: Explicit caller choice, or ``None`` to leave DCW off.
 
         Returns:
-            The explicit choice, or the loaded configuration's Turbo setting.
+            The explicit choice, or off when the caller leaves it unset.
         """
         if dcw_enabled is not None:
             return bool(dcw_enabled)
-        return bool(self.is_turbo_model())
+        return False
 
     def generate_music(
         self,
@@ -261,7 +260,7 @@ class GenerateMusicMixin:
             seed: Optional explicit seed from caller/UI.
             infer_method: Diffusion method name.
             dcw_enabled: Enable Differential Correction in Wavelet domain.
-                ``None`` selects the default for the loaded model family.
+                ``None`` leaves DCW off.
             dcw_mode: DCW mode — ``"low"`` / ``"high"`` / ``"double"`` / ``"pix"``.
             dcw_scaler: Low-band (or single-band) correction strength; modulated
                 by ``t_curr`` inside the sampler, so the effective strength decays
