@@ -7,6 +7,7 @@ from acestep.inference import format_sample
 from acestep.ui.gradio.i18n import t
 
 from .llm_action_params import build_user_metadata, convert_lm_params
+from .lyrics_response import clean_lyrics_response
 from .validation import clamp_duration_to_gpu_limit
 
 
@@ -138,6 +139,10 @@ def handle_format_caption(
     Any outer single/double quotes added by the LLM are stripped from the
     returned caption for cleaner textbox display.
     """
+    if not (caption or "").strip():
+        message = "Enter a music caption before enhancing it."
+        gr.Warning(message)
+        return _format_failure_response(7, message)
     result, duration_value, status_message = _execute_format_sample(
         llm_handler=llm_handler,
         caption=caption,
@@ -185,6 +190,10 @@ def handle_format_lyrics(
     Any outer single/double quotes added by the LLM are stripped from the
     returned lyrics for cleaner textbox display.
     """
+    if not (lyrics or "").strip():
+        message = "Enter lyrics before enhancing them."
+        gr.Warning(message)
+        return _format_failure_response(7, message)
     result, duration_value, status_message = _execute_format_sample(
         llm_handler=llm_handler,
         caption=caption,
@@ -202,8 +211,13 @@ def handle_format_lyrics(
     if result is None:
         return _format_failure_response(update_count=7, status_message=status_message)
 
+    formatted = clean_lyrics_response(_clean_optional_wrapped_quotes(result.lyrics), result.caption)
+    if formatted is None:
+        message = "The model returned a description instead of lyrics. Your lyrics were kept; try again."
+        gr.Warning(message)
+        return _format_failure_response(7, message)
     return (
-        _clean_optional_wrapped_quotes(result.lyrics),
+        formatted,
         result.bpm,
         duration_value,
         result.keyscale,

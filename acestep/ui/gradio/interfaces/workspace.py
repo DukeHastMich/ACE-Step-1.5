@@ -4,6 +4,7 @@ import gradio as gr
 from pathlib import Path
 from acestep.ui.gradio.events.results.generation_info import DEFAULT_RESULTS_DIR
 from .persona_controls import create_persona_controls
+from .upload_archive_controls import create_upload_archive
 
 from acestep.ui.gradio.i18n import t
 from .generation_tab_section import create_generation_tab_section
@@ -31,7 +32,9 @@ def create_workspace(demo, dit_handler, llm_handler, init_params, language):
                     with gr.Tab(t("workspace.saved_songs"), id="library"):
                         table, catalog = create_song_library(demo, generation, results)
                     with gr.Tab("Personas", id="personas"):
-                        create_persona_controls(demo, generation, table, catalog, right_tabs, Path(DEFAULT_RESULTS_DIR))
+                        persona_audio = create_persona_controls(demo, generation, table, catalog, right_tabs, Path(DEFAULT_RESULTS_DIR))
+                    with gr.Tab("Upload archive", id="uploads"):
+                        create_upload_archive(demo, generation, [persona_audio])
     generation["results_wrapper"] = results_wrapper
     generation["generate_btn"].click(
         lambda: gr.update(selected="takes"), outputs=[right_tabs], queue=False)

@@ -16,7 +16,7 @@ from .generation_tab_simple_controls import (
     build_simple_mode_controls,
 )
 from .generation_tab_source_controls import (
-    build_source_track_and_code_controls,
+    build_source_track_and_code_controls, build_source_audio_controls,
 )
 from .generation_tab_generate_controls import (
     build_generate_row_controls,
@@ -69,17 +69,18 @@ def create_generation_tab_section(
     with gr.Group():
         mode_controls = build_mode_selector_controls(initial_mode_choices)
         hidden_state_controls = build_hidden_generation_state()
+        source_audio_controls = build_source_audio_controls()
         song_title = gr.Textbox(label="Song title", placeholder="Give your song a name…",
-                                max_lines=1, elem_id="ace-song-title")
+                                max_lines=1, elem_id="ace-song-title", render=False)
         remaster_preset = gr.Radio(choices=["Subtle", "Normal", "High"], value="Subtle",
             label="Remaster variation", visible=False,
             info="Subtle stays closest. Normal allows more change. High allows the most. Saves a new track.")
         simple_mode_controls = build_simple_mode_controls()
         custom_mode_controls = build_custom_mode_controls()
         with gr.Accordion(t("workspace.audio_tools"), open=False) as audio_tools:
-            source_track_code_controls = build_source_track_and_code_controls()
-            variation_morph_controls = build_variation_morph_controls()
+            source_track_code_controls = build_source_track_and_code_controls(source_audio_controls)
             cover_controls = build_cover_strength_controls()
+        variation_morph_controls = build_variation_morph_controls()
         repainting_controls = build_repainting_controls()
         optional_controls = build_optional_parameter_controls(
             max_duration=max_duration,
@@ -87,6 +88,7 @@ def create_generation_tab_section(
             default_batch_size=default_batch_size,
             service_mode=service_mode,
         )
+        song_title.render()
         generate_controls = build_generate_row_controls(
             service_pre_initialized=service_pre_initialized,
             init_params=init_params,

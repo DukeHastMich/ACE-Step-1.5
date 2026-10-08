@@ -221,6 +221,7 @@ def register_generation_batch_navigation_handlers(context: GenerationWiringConte
         outputs=next_navigation_outputs,
     ).then(
         fn=lambda *args: res_h.generate_next_batch_background(dit_handler, llm_handler, *args),
+        concurrency_id="ace-model-inference", concurrency_limit=1, queue=True,
         inputs=[
             generation_section["autogen_checkbox"],
             results_section["generation_params_state"],

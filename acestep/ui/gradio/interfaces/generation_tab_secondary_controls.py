@@ -66,23 +66,25 @@ def build_custom_mode_controls() -> dict[str, Any]:
 
     with gr.Group(visible=True, elem_classes=["has-info-container"]) as custom_mode_group:
         create_help_button("generation_custom")
-        captions = gr.Textbox(
-            label=t("generation.caption_label"), placeholder=t("generation.caption_placeholder"),
-            lines=4, max_lines=8,
-        )
-        with gr.Row():
-            format_caption_btn = gr.Button(
-                t("generation.format_caption_btn"), variant="secondary", size="sm")
-            sample_btn = gr.Button(t("generation.sample_btn"), variant="secondary", size="sm")
-        lyrics = gr.Textbox(
-            label=t("generation.lyrics_label"), placeholder=t("generation.lyrics_placeholder"),
-            lines=8, max_lines=16,
-        )
-        with gr.Row(elem_classes="instrumental-row"):
-            instrumental_checkbox = gr.Checkbox(
-                label=t("generation.instrumental_label"), value=False, scale=1)
-            format_lyrics_btn = gr.Button(
-                t("generation.format_lyrics_btn"), variant="secondary", size="sm", scale=2)
+        with gr.Group(elem_classes="ace-create-card"):
+            lyrics = gr.Textbox(
+                label=t("generation.lyrics_label"), placeholder=t("generation.lyrics_placeholder"),
+                lines=8, max_lines=16,
+            )
+            with gr.Row(elem_classes="instrumental-row"):
+                instrumental_checkbox = gr.Checkbox(
+                    label=t("generation.instrumental_label"), value=False, scale=1)
+                format_lyrics_btn = gr.Button(
+                    t("generation.format_lyrics_btn"), variant="secondary", size="sm", scale=2)
+        with gr.Group(elem_classes="ace-create-card"):
+            captions = gr.Textbox(
+                label="Styles", placeholder=t("generation.caption_placeholder"),
+                lines=4, max_lines=8,
+            )
+            with gr.Row():
+                format_caption_btn = gr.Button(
+                    t("generation.format_caption_btn"), variant="secondary", size="sm")
+                sample_btn = gr.Button(t("generation.sample_btn"), variant="secondary", size="sm")
         with gr.Accordion(t("generation.reference_audio"), open=False):
             reference_audio = gr.Audio(
                 label=t("generation.reference_audio"), type="filepath", show_label=False)

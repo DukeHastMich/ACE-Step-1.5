@@ -104,3 +104,5 @@ def create_persona_controls(demo, generation, table, catalog, tabs, root):
         generation["reference_audio"], generation["captions"], status, previous_voice], queue=True)
     refresh.click(lambda: render_personas(root), outputs=[cards], queue=True)
     demo.load(lambda: render_personas(root), outputs=[cards], queue=True)
+
+    return upload

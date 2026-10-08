@@ -23,15 +23,17 @@ class RemixTests(unittest.TestCase):
                 table, catalog, button, selection = gr.HTML(), gr.State([]), gr.Button(), gr.State("")
                 keys = ("generation_mode", "src_audio", "captions", "lyrics", "song_title", "simple_query_input")
                 generation = {key: gr.Textbox() for key in keys}
+                generation["src_audio_row"] = gr.Row(visible=False)
                 wire_remix_action(table, catalog, button, selection, root, generation)
             handler = next(fn.fn for fn in demo.fns.values() if fn.fn.__name__ == "from_menu")
             self.assertEqual(handler([], gr.EventData(None, None)),
-                             tuple(gr.skip() for _ in keys))
+                             tuple(gr.skip() for _ in range(7)))
             result = handler([{"path": audio.name}], gr.EventData(None, {"song_id": audio.name}))
-            self.assertEqual(result, ("Remix", str(audio), "Jazz", "Words", "Second", ""))
+            self.assertEqual((result[0], result[1]["value"], *result[2:6]), ("Remix", str(audio), "Jazz", "Words", "Second", ""))
+            self.assertTrue(result[6]["visible"])
             remastered = handler([{"path": audio.name}],
                 gr.EventData(None, {"song_id": audio.name, "action": "remaster"}))
-            self.assertEqual(remastered[:4], ("Remaster", str(audio), "Jazz", "Words"))
+            self.assertEqual((remastered[0], remastered[1]["value"], *remastered[2:4]), ("Remaster", str(audio), "Jazz", "Words"))
             self.assertEqual(remastered[4], "Second (Remaster)")
             with self.assertRaises(gr.Error):
                 handler([], gr.EventData(None, {"song_id": audio.name}))

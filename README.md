@@ -1,4 +1,7 @@
 <h1 align="center">ACE-Step 1.5</h1>
+
+> **Studio fork:** See [features and change history](docs/STUDIO_CHANGELOG.md) for the library, personas, stems, remaster, upload archive and creation fixes.
+
 <h1 align="center">Pushing the Boundaries of Open-Source Music Generation</h1>
 <p align="center">
     <a href="https://acemusic.ai">ACEMusic</a> |

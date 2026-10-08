@@ -19,8 +19,8 @@ def build_source_audio_controls() -> dict[str, Any]:
         A component map containing ``src_audio_row``, ``src_audio``, ``analyze_btn``, and ``extract_help_group``.
     """
 
-    with gr.Row(equal_height=True, visible=False) as src_audio_row:
-        src_audio = gr.Audio(label=t("generation.source_audio"), type="filepath", scale=10)
+    with gr.Row(equal_height=True, visible=False, elem_id="ace-source-audio", elem_classes="ace-create-card") as src_audio_row:
+        src_audio = gr.Audio(label=t("generation.source_audio"), type="filepath", scale=10, interactive=True)
         with gr.Column(scale=1, min_width=80):
             analyze_btn = gr.Button(
                 t("generation.analyze_btn"),
@@ -124,7 +124,7 @@ def build_lm_code_hint_controls() -> dict[str, Any]:
     }
 
 
-def build_source_track_and_code_controls() -> dict[str, Any]:
+def build_source_track_and_code_controls(source_audio_controls=None) -> dict[str, Any]:
     """Create source-audio, track-selector, and LM-code hint controls.
 
     Args:
@@ -134,7 +134,8 @@ def build_source_track_and_code_controls() -> dict[str, Any]:
         A component map containing source audio actions, track selectors, and LM code controls.
     """
 
-    source_audio_controls = build_source_audio_controls()
+    if source_audio_controls is None:
+        source_audio_controls = build_source_audio_controls()
     track_selection_controls = build_track_selection_controls()
     lm_code_hint_controls = build_lm_code_hint_controls()
 

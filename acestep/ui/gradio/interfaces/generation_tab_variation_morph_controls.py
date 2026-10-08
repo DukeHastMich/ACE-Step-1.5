@@ -32,10 +32,10 @@ def build_variation_morph_controls() -> dict[str, Any]:
     open modal tutorials for each subsystem.
     """
 
-    with gr.Group() as variation_group:
+    with gr.Accordion("Retake & Variance / Edit", open=True) as variation_group:
         with gr.Row(equal_height=False):
             # ---- LEFT column: Retake ----
-            with gr.Column(scale=1, min_width=200) as flow_edit_column:
+            with gr.Column(scale=1, min_width=200):
                 with gr.Row():
                     retake_enabled = gr.Checkbox(
                         label="Retake", value=False, scale=8,
@@ -45,7 +45,7 @@ def build_variation_morph_controls() -> dict[str, Any]:
                     with gr.Row():
                         retake_variance = gr.Slider(
                             minimum=0.0, maximum=1.0, step=0.01, value=0.0,
-                            label="variance", scale=2,
+                            label="Variance", scale=2,
                             info="0=baseline; 0.05–0.15 subtle; 0.5+ strong.",
                         )
                         retake_seed = gr.Textbox(
@@ -63,7 +63,7 @@ def build_variation_morph_controls() -> dict[str, Any]:
                         visible=False,
                     )
             # ---- RIGHT column: Edit ----
-            with gr.Column(scale=1, min_width=200):
+            with gr.Column(scale=1, min_width=200) as flow_edit_column:
                 with gr.Row():
                     flow_edit_morph = gr.Checkbox(
                         label="Edit", value=False, scale=8,

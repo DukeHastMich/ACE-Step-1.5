@@ -22,7 +22,8 @@ class WorkspaceTests(unittest.TestCase):
             with patch(module + ".create_generation_tab_section", return_value=generation), \
                  patch(module + ".create_results_section", return_value=results), \
                  patch(module + ".create_song_library", return_value=(None, None)) as library, \
-                 patch(module + ".create_persona_controls"):
+                 patch(module + ".create_persona_controls"), \
+                 patch(module + ".create_upload_archive"):
                 returned = create_workspace(
                     demo, MagicMock(), MagicMock(), {"service_mode": service_mode}, "en")
         return demo, generation, results, returned, library

@@ -55,12 +55,14 @@ element.addEventListener('click', (event) => {
     }
     const remaster = event.target.closest('button[data-remaster]');
     if (remaster) {
+        document.querySelector('#ace-create-pane')?.scrollTo({top:0});
         trigger('change', {song_id: remaster.dataset.remaster, action: 'remaster'});
         remaster.closest('details').open = false;
         return;
     }
     const remix = event.target.closest('button[data-remix]');
     if (remix) {
+        document.querySelector('#ace-create-pane')?.scrollTo({top:0});
         trigger('change', {song_id: remix.dataset.remix});
         remix.closest('details').open = false;
         return;

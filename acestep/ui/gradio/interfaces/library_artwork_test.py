@@ -66,6 +66,7 @@ class ArtworkTests(unittest.TestCase):
         with gr.Blocks() as demo, patch(
                 "acestep.ui.gradio.interfaces.song_library.DEFAULT_RESULTS_DIR", str(self.root)):
             generation = {key: gr.Textbox() for key in ("generation_mode", "src_audio", "captions", "lyrics", "song_title", "simple_query_input")}
+            generation["src_audio_row"] = gr.Row(visible=False)
             create_song_library(demo, generation, {"generated_audio_batch": gr.File()})
         handler = next(fn.fn for fn in demo.fns.values() if fn.fn.__name__ == "select_song")
         songs = scan_songs(self.root)

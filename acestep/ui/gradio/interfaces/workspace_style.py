@@ -98,3 +98,10 @@ WORKSPACE_CSS += PLAYER_CSS
 
 from .library_track_view import TRACK_CSS
 WORKSPACE_CSS += TRACK_CSS
+
+WORKSPACE_CSS += """
+#ace-create-pane .ace-create-card {background:#1b1b21; border:1px solid #303039;
+    border-radius:14px; padding:12px; margin-bottom:12px;}
+#ace-source-audio {flex-wrap:wrap;}
+#ace-source-audio > .form, #ace-source-audio > .block {min-width:0 !important;}
+"""

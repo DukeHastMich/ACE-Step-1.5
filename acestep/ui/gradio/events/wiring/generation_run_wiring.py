@@ -61,6 +61,7 @@ def register_generation_run_handlers(context: GenerationWiringContext) -> None:
         ],
     ).then(
         fn=generation_wrapper,
+        concurrency_id="ace-model-inference", concurrency_limit=1, queue=True,
         inputs=[
             generation_section["captions"],
             generation_section["lyrics"],
@@ -204,6 +205,7 @@ def register_generation_run_handlers(context: GenerationWiringContext) -> None:
         ],
     ).then(
         fn=lambda *args: res_h.generate_next_batch_background(dit_handler, llm_handler, *args),
+        concurrency_id="ace-model-inference", concurrency_limit=1, queue=True,
         inputs=[
             generation_section["autogen_checkbox"],
             results_section["generation_params_state"],

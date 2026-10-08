@@ -2202,7 +2202,7 @@ class LLMHandler:
             [
                 {
                     "role": "system",
-                    "content": f"# Instruction\n{DEFAULT_LM_REWRITE_INSTRUCTION}\n\n"
+                    "content": f"# Instruction\n{DEFAULT_LM_REWRITE_INSTRUCTION}\nPreserve the supplied lyric words and language while improving lyric formatting and section tags. After </think>, output # Lyric followed only by the lyrics, never a caption or musical description.\n\n"
                 },
                 {
                     "role": "user",

@@ -21,11 +21,14 @@ def wire_remix_action(table, catalog, button, selection, root, generation):
     """Bind both remix entry points to the same complete set of creation controls."""
     keys = ("generation_mode", "src_audio", "captions", "lyrics", "song_title", "simple_query_input")
     targets = [generation[key] for key in keys]
+    targets.append(generation["src_audio_row"])
 
     def load(relative):
         """Surface missing audio as a recoverable UI error."""
         try:
-            return remix_values(root, relative)
+            values = list(remix_values(root, relative))
+            values[1] = gr.update(value=values[1], label="Source Audio — " + (values[4] or relative))
+            return (*values, gr.update(visible=True))
         except (OSError, ValueError) as exc:
             raise gr.Error(str(exc)) from exc
 

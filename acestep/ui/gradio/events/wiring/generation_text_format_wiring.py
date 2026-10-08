@@ -22,6 +22,7 @@ def register_generation_text_format_handlers(
 
     # ========== Format Caption Button ==========
     generation_section["format_caption_btn"].click(
+        concurrency_id="ace-model-inference", concurrency_limit=1, queue=True,
         fn=lambda caption, lyrics, bpm, duration, key_scale, time_sig, temp, top_k, top_p, debug: gen_h.handle_format_caption(
             llm_handler, caption, lyrics, bpm, duration, key_scale, time_sig, temp, top_k, top_p, debug
         ),
@@ -93,6 +94,7 @@ def register_generation_text_format_handlers(
 
     # ========== Format Lyrics Button ==========
     generation_section["format_lyrics_btn"].click(
+        concurrency_id="ace-model-inference", concurrency_limit=1, queue=True,
         fn=lambda caption, lyrics, bpm, duration, key_scale, time_sig, temp, top_k, top_p, debug: gen_h.handle_format_lyrics(
             llm_handler, caption, lyrics, bpm, duration, key_scale, time_sig, temp, top_k, top_p, debug
         ),
